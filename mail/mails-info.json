@@ -1,23 +1,29 @@
 [
   {
     "id": 1,
-    "subject": "Welcome to the Company - Important",
-    "sender": "hr@company.internal",
+    "subject": "Welcome to Apex Innovations - Please Read",
+    "sender": "hr@apexinnovations.internal",
     "receiver": "employee19@giriaryan694-a11y.github.io",
-    "time": "09:15 AM",
+    "time": "10:23 AM",
     "mdFile": "md/welcome.md",
-    "hasAttachment": false,
     "unread": true
   },
   {
     "id": 2,
-    "subject": "Urgent: Password Reset Required",
-    "sender": "it-support@company.internal",
+    "subject": "URGENT: Your Account Will Be Suspended",
+    "sender": "it-security@apexinnovations.internal",
     "receiver": "employee19@giriaryan694-a11y.github.io",
     "time": "Yesterday",
     "mdFile": "md/phishing-alert.md",
-    "hasAttachment": true,
-    "attachmentName": "password_reset_form.pdf",
     "unread": true
+  },
+  {
+    "id": 3,
+    "subject": "Q2 Bonus Update - Action Required",
+    "sender": "finance@apexinnovations.internal",
+    "receiver": "employee19@giriaryan694-a11y.github.io",
+    "time": "2 days ago",
+    "mdFile": "md/urgent-request.md",
+    "unread": false
   }
 ]
