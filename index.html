@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Human Risk Training Lab</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      background: url('https://giriaryan694-a11y.github.io/human-risk-training-lab/assets/images/wallpaper.png') no-repeat center center fixed;
+      background-size: cover;
+      height: 100vh;
+      overflow: hidden;
+      color: white;
+      position: relative;
+    }
+
+    /* Dark overlay for better readability */
+    body::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.65);
+      z-index: 1;
+    }
+
+    .desktop {
+      position: relative;
+      z-index: 2;
+      height: 100vh;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Taskbar */
+    .taskbar {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      background: rgba(20, 20, 20, 0.95);
+      backdrop-filter: blur(10px);
+      padding: 8px 15px;
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      z-index: 100;
+    }
+
+    /* Desktop Icons */
+    .icons {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
+      gap: 20px;
+      padding: 30px;
+      max-width: 1200px;
+      margin: 0 auto;
+      z-index: 2;
+    }
+
+    .icon {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      width: 90px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      user-select: none;
+    }
+
+    .icon:hover {
+      transform: scale(1.08);
+    }
+
+    .icon img {
+      width: 58px;
+      height: 58px;
+      margin-bottom: 8px;
+      filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.5));
+    }
+
+    .icon span {
+      font-size: 13px;
+      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.7);
+      background: rgba(0, 0, 0, 0.4);
+      padding: 2px 8px;
+      border-radius: 4px;
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+      .icons {
+        grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+        gap: 18px;
+        padding: 20px;
+      }
+      
+      .icon img {
+        width: 52px;
+        height: 52px;
+      }
+      
+      .icon span {
+        font-size: 12px;
+      }
+    }
+
+    /* Window Header Style (for future use) */
+    .window-header {
+      background: linear-gradient(to right, #1e3a8a, #3b82f6);
+      padding: 8px 12px;
+      border-radius: 8px 8px 0 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="desktop">
+
+    <!-- Desktop Icons Container -->
+    <div class="icons">
+
+      <a href="mail/index.html" class="icon">
+        <img src="https://cdn-icons-png.flaticon.com/512/5968/5968534.png" alt="Mail">
+        <span>Mail</span>
+      </a>
+
+      <a href="lookup/index.html" class="icon">
+        <img src="https://cdn-icons-png.flaticon.com/512/5968/5968543.png" alt="Lookup Tools">
+        <span>Lookup Tools</span>
+      </a>
+
+      <a href="anti-virus/index.html" class="icon">
+        <img src="https://cdn-icons-png.flaticon.com/512/3104/3104685.png" alt="Anti Virus">
+        <span>Anti Virus</span>
+      </a>
+
+      <a href="ticketbox/index.html" class="icon">
+        <img src="https://cdn-icons-png.flaticon.com/512/5968/5968958.png" alt="Support Ticket">
+        <span>Support Ticket</span>
+      </a>
+
+      <a href="tips/index.html" class="icon">
+        <img src="https://cdn-icons-png.flaticon.com/512/5968/5968890.png" alt="Tips">
+        <span>Security Tips</span>
+      </a>
+
+    </div>
+
+  </div>
+
+  <!-- Taskbar -->
+  <div class="taskbar">
+    <div style="color: #00ff9d; font-weight: bold; font-size: 14px;">
+      Human Risk Training Lab
+    </div>
+  </div>
+
+</body>
+</html>
