@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>HR Portal - Apex Innovations</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      background: #0f172a;
+      color: #e2e8f0;
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .container {
+      background: #1e2937;
+      width: 100%;
+      max-width: 460px;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.7);
+    }
+
+    .header {
+      background: linear-gradient(135deg, #1e40af, #3b82f6);
+      padding: 25px;
+      text-align: center;
+      color: white;
+    }
+
+    .header h1 {
+      font-size: 24px;
+      margin-bottom: 5px;
+    }
+
+    .header p {
+      opacity: 0.9;
+      font-size: 15px;
+    }
+
+    .content {
+      padding: 35px 30px;
+    }
+
+    .logo {
+      text-align: center;
+      margin-bottom: 25px;
+      font-size: 32px;
+      font-weight: bold;
+      color: #60a5fa;
+    }
+
+    input {
+      width: 100%;
+      padding: 15px;
+      margin: 12px 0;
+      background: #334155;
+      border: 1px solid #475569;
+      border-radius: 8px;
+      color: white;
+      font-size: 16px;
+    }
+
+    input:focus {
+      outline: none;
+      border-color: #60a5fa;
+      box-shadow: 0 0 0 3px rgba(96, 165, 250, 0.2);
+    }
+
+    .btn {
+      width: 100%;
+      padding: 16px;
+      background: #3b82f6;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 17px;
+      font-weight: bold;
+      margin-top: 20px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    .btn:hover {
+      background: #2563eb;
+      transform: translateY(-2px);
+    }
+
+    .footer-text {
+      text-align: center;
+      margin-top: 25px;
+      font-size: 13px;
+      color: #94a3b8;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <div class="header">
+      <h1>Apex Innovations</h1>
+      <p>Human Resources Portal</p>
+    </div>
+
+    <div class="content">
+      <div class="logo">HR Update</div>
+      <h2 style="text-align:center; margin-bottom:25px; color:#cbd5e1;">
+        Update Your Employee Profile
+      </h2>
+
+      <form id="phishForm">
+        <input type="text" id="username" placeholder="Employee ID or Username" required />
+        <input type="password" id="password" placeholder="Password" required />
+        
+        <button type="submit" class="btn">Submit & Continue</button>
+      </form>
+
+      <div class="footer-text">
+        This is a training simulation • Credentials are not sent anywhere
+      </div>
+    </div>
+  </div>
+
+  <!-- Simulation Result Modal -->
+  <div id="resultModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; 
+                               background:rgba(0,0,0,0.95); z-index:1000; align-items:center; justify-content:center;">
+    <div style="background:#1e2937; max-width:560px; width:92%; border-radius:12px; padding:30px; color:#e2e8f0;">
+      <h2 style="color:#ef4444; text-align:center; margin-bottom:25px;">Phishing Simulation Report</h2>
+      
+      <div id="phishInfo" style="line-height:1.8; font-size:15.3px;"></div>
+
+      <button onclick="closeModal()" style="margin-top:30px; width:100%; padding:15px; background:#ef4444; 
+                                           color:white; border:none; border-radius:8px; font-size:16px; cursor:pointer;">
+        Close Report
+      </button>
+    </div>
+  </div>
+
+  <script>
+    // Advanced Fingerprint Function
+    function getFingerprint() {
+      let fp = "";
+
+      // Canvas Fingerprint
+      const canvas = document.createElement("canvas");
+      const ctx = canvas.getContext("2d");
+      ctx.textBaseline = "alphabetic";
+      ctx.font = "16px Arial";
+      ctx.fillStyle = "#f60";
+      ctx.fillRect(30, 30, 200, 80);
+      ctx.fillStyle = "#069";
+      ctx.fillText("Apex HR Portal", 40, 70);
+      fp += canvas.toDataURL();
+
+      // Additional hardware signals
+      fp += "|" + screen.width + "x" + screen.height;
+      fp += "|" + screen.colorDepth;
+      fp += "|" + (navigator.hardwareConcurrency || "N/A");
+      fp += "|" + (navigator.deviceMemory || "N/A");
+
+      return btoa(fp).slice(0, 36);
+    }
+
+    document.getElementById('phishForm').addEventListener('submit', async function(e) {
+      e.preventDefault();
+
+      const username = document.getElementById('username').value.trim() || "(Not Provided)";
+      const password = document.getElementById('password').value || "(Not Provided)";
+
+      const submitBtn = document.querySelector('.btn');
+      const originalBtnText = submitBtn.textContent;
+      submitBtn.textContent = "Processing...";
+      submitBtn.disabled = true;
+
+      // Real IP Lookup using ip-api.com (free & no key)
+      let ipData = { ip: "Fetching IP...", country: "", city: "", isp: "" };
+
+      try {
+        const response = await fetch('https://ip-api.com/json/?fields=query,country,countryCode,city,regionName,isp');
+        const data = await response.json();
+        
+        if (data.query) {
+          ipData = {
+            ip: data.query,
+            country: `${data.country} (${data.countryCode})`,
+            city: `${data.city}, ${data.regionName || ''}`,
+            isp: data.isp || "Unknown ISP"
+          };
+        }
+      } catch (err) {
+        ipData.ip = "IP lookup failed";
+      }
+
+      const userAgent = navigator.userAgent;
+      const screenRes = `${screen.width} × ${screen.height} (${screen.colorDepth}-bit)`;
+      const fingerprint = getFingerprint();
+      const timestamp = new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' });
+
+      const infoHTML = `
+        <strong style="color:#f87171;">Captured Information:</strong><br><br>
+        <strong>Username / Employee ID:</strong> ${username}<br>
+        <strong>Password:</strong> ${password}<br><br>
+
+        <strong>Real IP Information:</strong><br>
+        IP Address: <strong>${ipData.ip}</strong><br>
+        Location: ${ipData.city}<br>
+        Country: ${ipData.country}<br>
+        ISP: ${ipData.isp}<br><br>
+
+        <strong>Device Fingerprint:</strong><br>
+        User Agent: <small>${userAgent}</small><br>
+        Screen Resolution: ${screenRes}<br>
+        Hardware Fingerprint: <small>${fingerprint}</small><br>
+        Timestamp: ${timestamp}
+      `;
+
+      document.getElementById('phishInfo').innerHTML = infoHTML;
+      document.getElementById('resultModal').style.display = 'flex';
+
+      // Reset button
+      submitBtn.textContent = originalBtnText;
+      submitBtn.disabled = false;
+    });
+
+    function closeModal() {
+      document.getElementById('resultModal').style.display = 'none';
+      document.getElementById('phishForm').reset();
+    }
+  </script>
+</body>
+</html>
