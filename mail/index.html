@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Mail - Human Risk Training Lab</title>
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      background: #0f0f0f;
+      color: #e0e0e0;
+      height: 100vh;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    header {
+      background: #1a1a1a;
+      padding: 12px 20px;
+      border-bottom: 1px solid #333;
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+
+    .back-btn {
+      background: none;
+      border: none;
+      color: #00ff9d;
+      font-size: 24px;
+      cursor: pointer;
+    }
+
+    .logo {
+      color: #00ff9d;
+      font-weight: bold;
+      font-size: 20px;
+    }
+
+    .container {
+      display: flex;
+      flex: 1;
+      overflow: hidden;
+    }
+
+    /* Email List */
+    .email-list {
+      width: 380px;
+      border-right: 1px solid #333;
+      overflow-y: auto;
+      background: #121212;
+    }
+
+    .email-item {
+      padding: 14px 18px;
+      border-bottom: 1px solid #222;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+
+    .email-item:hover {
+      background: #1f1f1f;
+    }
+
+    .email-item.unread {
+      background: #1a2533;
+    }
+
+    .email-subject {
+      font-weight: 600;
+      margin-bottom: 4px;
+      color: white;
+    }
+
+    .email-sender {
+      font-size: 14px;
+      color: #aaa;
+    }
+
+    .email-time {
+      font-size: 12px;
+      color: #666;
+      float: right;
+    }
+
+    /* Email Viewer */
+    .email-viewer {
+      flex: 1;
+      padding: 30px;
+      overflow-y: auto;
+      background: #0a0a0a;
+    }
+
+    .email-header {
+      margin-bottom: 25px;
+      border-bottom: 1px solid #333;
+      padding-bottom: 20px;
+    }
+
+    .email-title {
+      font-size: 24px;
+      margin-bottom: 10px;
+    }
+
+    .email-meta {
+      display: flex;
+      justify-content: space-between;
+      font-size: 14px;
+      color: #bbb;
+    }
+
+    .attachment-btn {
+      background: #333;
+      color: #00ff9d;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 6px;
+      cursor: pointer;
+      margin-top: 15px;
+    }
+
+    .markdown-content {
+      line-height: 1.7;
+      font-size: 16px;
+    }
+
+    .markdown-content h1, .markdown-content h2 {
+      color: #00ff9d;
+      margin: 20px 0 10px;
+    }
+
+    .no-email {
+      text-align: center;
+      margin-top: 100px;
+      color: #666;
+      font-size: 18px;
+    }
+
+    @media (max-width: 768px) {
+      .container { flex-direction: column; }
+      .email-list { width: 100%; height: 40%; }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <button class="back-btn" onclick="window.history.back()">←</button>
+    <div class="logo">Mail • Human Risk Lab</div>
+  </header>
+
+  <div class="container">
+    <!-- Email List -->
+    <div class="email-list" id="emailList">
+      <!-- Populated by JavaScript -->
+    </div>
+
+    <!-- Email Viewer -->
+    <div class="email-viewer" id="emailViewer">
+      <div class="no-email">
+        <h2>Select an email to read</h2>
+        <p>Be careful what you click — this is a training simulation.</p>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let emails = [];
+
+    // Load emails from JSON
+    async function loadEmails() {
+      try {
+        const response = await fetch('mails-info.json');
+        emails = await response.json();
+        renderEmailList();
+      } catch (error) {
+        console.error("Failed to load emails:", error);
+        document.getElementById('emailList').innerHTML = 
+          `<p style="color:red; padding:20px;">Error loading emails. Make sure mails-info.json exists.</p>`;
+      }
+    }
+
+    function renderEmailList() {
+      const container = document.getElementById('emailList');
+      container.innerHTML = '';
+
+      emails.forEach(email => {
+        const div = document.createElement('div');
+        div.className = `email-item ${email.unread ? 'unread' : ''}`;
+        div.innerHTML = `
+          <div class="email-subject">${email.subject}</div>
+          <div class="email-sender">${email.sender}</div>
+          <div class="email-time">${email.time}</div>
+        `;
+        div.onclick = () => openEmail(email);
+        container.appendChild(div);
+      });
+    }
+
+    async function openEmail(email) {
+      const viewer = document.getElementById('emailViewer');
+      
+      viewer.innerHTML = `
+        <div class="email-header">
+          <h1 class="email-title">${email.subject}</h1>
+          <div class="email-meta">
+            <div>
+              <strong>From:</strong> ${email.sender}<br>
+              <strong>To:</strong> ${email.receiver}
+            </div>
+            <div style="text-align: right;">
+              ${email.time}
+            </div>
+          </div>
+        </div>
+
+        <div class="markdown-content" id="markdownContent">
+          Loading email content...
+        </div>
+
+        ${email.hasAttachment ? `
+          <button class="attachment-btn" onclick="alert('Attachment downloaded (Simulation only)\\nFile: ${email.attachmentName || 'document.pdf'}')">
+            📎 Download Attachment
+          </button>
+        ` : ''}
+      `;
+
+      // Load Markdown content
+      if (email.mdFile) {
+        try {
+          const res = await fetch(email.mdFile);
+          const mdText = await res.text();
+          const html = marked.parse(mdText);
+          document.getElementById('markdownContent').innerHTML = html;
+        } catch (err) {
+          document.getElementById('markdownContent').innerHTML = 
+            `<p style="color: #ff5555;">Failed to load email content.</p>`;
+        }
+      }
+    }
+
+    // Initialize
+    window.onload = loadEmails;
+  </script>
+</body>
+</html>
