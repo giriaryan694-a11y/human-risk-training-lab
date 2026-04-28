@@ -38,7 +38,7 @@
     .logo {
       color: #00ff9d;
       font-weight: bold;
-      font-size: 20px;
+      font-size: 21px;
     }
 
     .container {
@@ -103,17 +103,6 @@
       border-bottom: 1px solid #333;
     }
 
-    .attachment-btn {
-      background: #2a2a2a;
-      color: #00ff9d;
-      border: 1px solid #00ff9d;
-      padding: 10px 18px;
-      border-radius: 6px;
-      cursor: pointer;
-      margin-top: 20px;
-      font-size: 15px;
-    }
-
     .markdown-content {
       line-height: 1.75;
       font-size: 16.2px;
@@ -122,6 +111,14 @@
     .markdown-content h1, .markdown-content h2, .markdown-content h3 {
       color: #00ff9d;
       margin: 25px 0 12px;
+    }
+
+    .warning-box {
+      background: #3a2a00;
+      border-left: 5px solid #ffaa00;
+      padding: 12px 16px;
+      margin: 20px 0;
+      border-radius: 4px;
     }
 
     .no-email {
@@ -148,8 +145,8 @@
 
     <div class="email-viewer" id="emailViewer">
       <div class="no-email">
-        <h2>📬 Select an email</h2>
-        <p>Training Mode: Watch out for social engineering attempts!</p>
+        <h2>📬 Select an email to read</h2>
+        <p>Training Mode: Look for suspicious links and requests.</p>
       </div>
     </div>
   </div>
@@ -163,7 +160,8 @@
         emails = await res.json();
         renderEmailList();
       } catch (e) {
-        document.getElementById('emailList').innerHTML = `<p style="color:red;padding:20px;">Failed to load mails-info.json</p>`;
+        document.getElementById('emailList').innerHTML = 
+          `<p style="color:red; padding:20px;">Error loading mails-info.json</p>`;
       }
     }
 
@@ -187,14 +185,6 @@
     async function openEmail(email) {
       const viewer = document.getElementById('emailViewer');
 
-      let attachmentHTML = '';
-      if (email.hasAttachment) {
-        attachmentHTML = `
-          <button class="attachment-btn" onclick="simulateDownload('${email.attachmentName || 'file.pdf'}')">
-            📎 ${email.attachmentName || 'Download Attachment'}
-          </button>`;
-      }
-
       viewer.innerHTML = `
         <div class="email-header">
           <h1 class="email-title">${email.subject}</h1>
@@ -207,8 +197,9 @@
           </div>
         </div>
 
-        <div class="markdown-content" id="mdContent">Loading content...</div>
-        ${attachmentHTML}
+        <div class="markdown-content" id="mdContent">
+          Loading email content...
+        </div>
       `;
 
       if (email.mdFile) {
@@ -217,15 +208,13 @@
           const text = await res.text();
           document.getElementById('mdContent').innerHTML = marked.parse(text);
         } catch (err) {
-          document.getElementById('mdContent').innerHTML = `<p style="color:#ff6666;">Could not load email content.</p>`;
+          document.getElementById('mdContent').innerHTML = 
+            `<p style="color:#ff6666;">Failed to load email content.</p>`;
         }
       }
     }
 
-    function simulateDownload(filename) {
-      alert(`✅ Attachment Downloaded (Simulation)\nFile: ${filename}\n\nThis is just a training simulation.`);
-    }
-
+    // Initialize
     window.onload = loadEmails;
   </script>
 </body>
