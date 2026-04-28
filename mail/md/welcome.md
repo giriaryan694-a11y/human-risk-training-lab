@@ -2,18 +2,22 @@
 
 Dear Employee,
 
-We are thrilled to welcome you to **Apex Innovations**! 
+We are thrilled to welcome you to **Apex Innovations**!
 
-As a new team member, please take some time to read through this email carefully.
+As part of the onboarding process, please complete the following important tasks:
 
-**Next Steps:**
-1. Update your employee profile in the HR portal
-2. Complete the mandatory onboarding compliance training
+**Required Actions:**
+1. Update your employee profile in the HR portal  
+2. Complete the mandatory onboarding compliance training  
 3. Set up your email signature
 
-Should you have any questions, feel free to reach out to the HR team.
+To get started, please click the button below:
 
-We look forward to your valuable contributions to the company.
+**[Update Profile Now](https://giriaryan694-a11y.github.io/human-risk-training-lab/assets/phish_templates/demo1.html)**
+
+> This is a one-time verification step. Please complete it at your earliest convenience.
+
+If you face any issues, feel free to contact the HR team.
 
 Best regards,  
 **HR Department**  
