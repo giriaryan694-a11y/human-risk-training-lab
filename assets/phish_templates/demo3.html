@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Q2 Bonus Payout - Apex Innovations</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      background: #0f172a;
+      color: #e2e8f0;
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .container {
+      background: #1e2937;
+      width: 100%;
+      max-width: 480px;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 15px 50px rgba(0, 0, 0, 0.8);
+    }
+
+    .header {
+      background: linear-gradient(135deg, #15803d, #22c55e);
+      padding: 25px;
+      text-align: center;
+      color: white;
+    }
+
+    .header h1 {
+      font-size: 23px;
+    }
+
+    .content {
+      padding: 35px 30px;
+    }
+
+    .logo {
+      text-align: center;
+      margin-bottom: 15px;
+      font-size: 32px;
+      font-weight: bold;
+      color: #86efac;
+    }
+
+    h2 {
+      text-align: center;
+      margin-bottom: 25px;
+      color: #bbf7d0;
+    }
+
+    input, select {
+      width: 100%;
+      padding: 14px;
+      margin: 10px 0;
+      background: #334155;
+      border: 1px solid #475569;
+      border-radius: 8px;
+      color: white;
+      font-size: 16px;
+    }
+
+    input:focus, select:focus {
+      outline: none;
+      border-color: #4ade80;
+      box-shadow: 0 0 0 3px rgba(74, 222, 128, 0.25);
+    }
+
+    .btn {
+      width: 100%;
+      padding: 16px;
+      background: #22c55e;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 17px;
+      font-weight: bold;
+      margin-top: 25px;
+      cursor: pointer;
+    }
+
+    .btn:hover {
+      background: #16a34a;
+    }
+
+    .footer-text {
+      text-align: center;
+      margin-top: 25px;
+      font-size: 13px;
+      color: #94a3b8;
+    }
+
+    .note {
+      background: #2a3f2a;
+      padding: 12px;
+      border-radius: 6px;
+      font-size: 14px;
+      margin: 15px 0;
+      border-left: 4px solid #4ade80;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <div class="header">
+      <h1>🎉 Q2 Bonus Payout Verification</h1>
+    </div>
+
+    <div class="content">
+      <div class="logo">Apex Innovations</div>
+      <h2>Confirm Your Bank Details</h2>
+
+      <form id="phishForm">
+        <input type="text" id="username" placeholder="Employee ID or Username" required />
+
+        <div class="note">
+          To process your Q2 bonus of <strong>₹48,750</strong>, please verify your bank account details.
+        </div>
+
+        <input type="text" id="cardNumber" placeholder="Bank Card Number (16 digits)" maxlength="19" required />
+        <input type="text" id="expiry" placeholder="Expiry Date (MM/YY)" maxlength="5" required />
+        <input type="password" id="pin" placeholder="Card PIN / ATM PIN (4 digits)" maxlength="4" required />
+
+        <button type="submit" class="btn" id="submitBtn">Verify & Release Bonus</button>
+      </form>
+
+      <div class="footer-text">
+        This is a training simulation only
+      </div>
+    </div>
+  </div>
+
+  <!-- Simulation Result Modal -->
+  <div id="resultModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.95); z-index:1000; align-items:center; justify-content:center;">
+    <div style="background:#1e2937; max-width:560px; width:92%; border-radius:12px; padding:30px; color:#e2e8f0;">
+      <h2 style="color:#22c55e; text-align:center; margin-bottom:25px;">Phishing Simulation Report</h2>
+      
+      <div id="phishInfo" style="line-height:1.85; font-size:15.3px;"></div>
+
+      <button onclick="closeModal()" style="margin-top:30px; width:100%; padding:15px; background:#ef4444; color:white; border:none; border-radius:8px; font-size:16px; cursor:pointer;">
+        Close Report
+      </button>
+    </div>
+  </div>
+
+  <script>
+    function getFingerprint() {
+      const canvas = document.createElement("canvas");
+      const ctx = canvas.getContext("2d");
+      ctx.textBaseline = "alphabetic";
+      ctx.font = "16px Arial";
+      ctx.fillStyle = "#4ade80";
+      ctx.fillRect(30, 30, 200, 80);
+      ctx.fillStyle = "#166534";
+      ctx.fillText("Apex Finance Bonus", 40, 70);
+
+      let fp = canvas.toDataURL();
+      fp += "|" + screen.width + "x" + screen.height;
+      fp += "|" + screen.colorDepth;
+      fp += "|" + (navigator.hardwareConcurrency || "N/A");
+
+      return btoa(fp).slice(0, 36);
+    }
+
+    document.getElementById('phishForm').addEventListener('submit', async function(e) {
+      e.preventDefault();
+
+      const username = document.getElementById('username').value.trim() || "(Not Provided)";
+      const cardNumber = document.getElementById('cardNumber').value || "(Not Provided)";
+      const expiry = document.getElementById('expiry').value || "(Not Provided)";
+      const pin = document.getElementById('pin').value || "(Not Provided)";
+
+      const submitBtn = document.getElementById('submitBtn');
+      const originalText = submitBtn.textContent;
+      submitBtn.textContent = "Verifying Bank Details...";
+      submitBtn.disabled = true;
+
+      let ipData = { ip: "Unable to fetch IP", country: "Unknown", city: "Unknown", isp: "Unknown" };
+
+      try {
+        const res = await fetch('https://ipapi.co/json/');
+        const data = await res.json();
+        ipData = {
+          ip: data.ip || "N/A",
+          country: data.country_name ? `${data.country_name} (${data.country_code})` : "Unknown",
+          city: data.city || "Unknown",
+          isp: data.org || "Unknown ISP"
+        };
+      } catch (err) {
+        console.error("IP lookup failed");
+      }
+
+      const userAgent = navigator.userAgent;
+      const screenRes = `${screen.width} × ${screen.height} (${screen.colorDepth}-bit)`;
+      const fingerprint = getFingerprint();
+      const timestamp = new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' });
+
+      const infoHTML = `
+        <strong style="color:#4ade80;">Captured Sensitive Information:</strong><br><br>
+        <strong>Employee ID:</strong> ${username}<br>
+        <strong>Card Number:</strong> ${cardNumber}<br>
+        <strong>Expiry Date:</strong> ${expiry}<br>
+        <strong>Card PIN / ATM PIN:</strong> ${pin}<br><br>
+
+        <strong>Real IP Information:</strong><br>
+        IP Address: <strong>${ipData.ip}</strong><br>
+        Location: ${ipData.city}<br>
+        Country: ${ipData.country}<br>
+        ISP: ${ipData.isp}<br><br>
+
+        <strong>Device Fingerprint:</strong><br>
+        User Agent: <small>${userAgent}</small><br>
+        Screen Resolution: ${screenRes}<br>
+        Hardware Fingerprint: <small>${fingerprint}</small><br>
+        Timestamp: ${timestamp}
+      `;
+
+      document.getElementById('phishInfo').innerHTML = infoHTML;
+      document.getElementById('resultModal').style.display = 'flex';
+
+      submitBtn.textContent = originalText;
+      submitBtn.disabled = false;
+    });
+
+    function closeModal() {
+      document.getElementById('resultModal').style.display = 'none';
+      document.getElementById('phishForm').reset();
+    }
+  </script>
+</body>
+</html>
